@@ -122,18 +122,18 @@ push: $(foreach version,$(VERSIONS),push-$(version)) $(PUSH_DEP)
 define push-version
 push-$1: test-$1
 ifeq ($(do_default),true)
-	$(DOCKER) buildx build --platform linux/arm64,linux/amd64 -t $(REPO_NAME)/$(IMAGE_NAME):$(version) $1
+	$(DOCKER) buildx build --platform linux/arm64,linux/amd64 -t $(REPO_NAME)/$(IMAGE_NAME):$(version) --push $1
 endif
 ifeq ($(do_alpine),true)
 ifneq ("$(wildcard $1/alpine)","")
-	$(DOCKER) buildx build --platform linux/arm64,linux/amd64 -t $(REPO_NAME)/$(IMAGE_NAME):$(version)-alpine $1/alpine
+	$(DOCKER) buildx build --platform linux/arm64,linux/amd64 -t $(REPO_NAME)/$(IMAGE_NAME):$(version)-alpine --push $1/alpine
 endif
 endif
 endef
 $(foreach version,$(VERSIONS),$(eval $(call push-version,$(version))))
 
 push-latest: tag-latest $(PUSH_LATEST_DEP)
-	$(DOCKER) buildx build --platform linux/arm64,linux/amd64 -t $(REPO_NAME)/$(IMAGE_NAME):$(version) $1
+	$(DOCKER) image push $(REPO_NAME)/$(IMAGE_NAME):latest
 	@$(DOCKER) run -v "$(PWD)":/workspace \
                       -e DOCKERHUB_USERNAME='$(DOCKERHUB_USERNAME)' \
                       -e DOCKERHUB_PASSWORD='$(DOCKERHUB_PASSWORD)' \
