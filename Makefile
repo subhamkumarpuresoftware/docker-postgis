@@ -123,11 +123,11 @@ push: $(foreach version,$(VERSIONS),push-$(version)) $(PUSH_DEP)
 define push-version
 push-$1: test-$1
 ifeq ($(do_default),true)
-	$(DOCKER) image push $(REPO_NAME)/$(IMAGE_NAME):$(version)
+	$(DOCKER) buildx build --platform linux/arm64,linux/amd64 -t $(REPO_NAME)/$(IMAGE_NAME):$(version) $1
 endif
 ifeq ($(do_alpine),true)
 ifneq ("$(wildcard $1/alpine)","")
-	$(DOCKER) image push $(REPO_NAME)/$(IMAGE_NAME):$(version)-alpine
+	$(DOCKER) buildx build --platform linux/arm64,linux/amd64 -t $(REPO_NAME)/$(IMAGE_NAME):$(version)-alpine $1/alpine
 endif
 endif
 endef
