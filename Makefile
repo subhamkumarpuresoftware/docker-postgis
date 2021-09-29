@@ -51,7 +51,7 @@ endif
 
 # The repository and image names default to the official but can be overriden
 # via environment variables.
-REPO_NAME  ?= postgis
+REPO_NAME  ?= subham328
 IMAGE_NAME ?= postgis
 
 DOCKER=docker
