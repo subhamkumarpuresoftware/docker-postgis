@@ -124,7 +124,7 @@ push: $(foreach version,$(VERSIONS),push-$(version)) $(PUSH_DEP)
 define push-version
 push-$1: test-$1
 ifeq ($(do_default),true)
-	ifeq ($(VERSIONS),$(filter $(VERSIONS),AMD_VERSION1 AMD_VERSION1 AMD_VERSION1 ))
+	ifeq ($(VERSIONS),$(filter $(VERSIONS),$(AMD_VERSION1) $(AMD_VERSION2) $(AMD_VERSION3) ))
 	        $(DOCKER) image push $(REPO_NAME)/$(IMAGE_NAME):$(version)
 	else
 	        $(DOCKER) buildx build --platform linux/arm64,linux/amd64 -t $(REPO_NAME)/$(IMAGE_NAME):$(version) --push $1
@@ -132,7 +132,7 @@ ifeq ($(do_default),true)
 endif
 ifeq ($(do_alpine),true)
 ifneq ("$(wildcard $1/alpine)","")
-	ifeq ($(VERSIONS),$(filter $(VERSIONS),AMD_VERSION1 AMD_VERSION1 AMD_VERSION1 ))
+	ifeq ($(VERSIONS),$(filter $(VERSIONS),$(AMD_VERSION1) $(AMD_VERSION2) $(AMD_VERSION3) ))
 	        $(DOCKER) image push $(REPO_NAME)/$(IMAGE_NAME):$(version)-alpine
 	else
 		$(DOCKER) buildx build --platform linux/arm64,linux/amd64 -t $(REPO_NAME)/$(IMAGE_NAME):$(version)-alpine --push $1/alpine
